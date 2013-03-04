@@ -31,8 +31,8 @@
     if (! Expr.leftMatch) Expr.leftMatch = {} ;
 
         /* 2010-04-21 Balazs fix for jQuery (Sizzle) 1.4.2 */
-       // Expr.leftMatch.ATTR = new RegExp(/(^(?:.|\r|\n)*?)/.source +
-       // Expr.match.ATTR.source.replace(/\\(\d+)/g, function (all, num) { return "\\" + (num - 0 + 1); }));
+        Expr.leftMatch.ATTR = new RegExp(/(^(?:.|\r|\n)*?)/.source +
+        Expr.match.ATTR.source.replace(/\\(\d+)/g, function (all, num) { return "\\" + (num - 0 + 1); }));
         
     /* 
     2012 MAR 04: DBJ
