@@ -151,7 +151,7 @@ load :=  {
     var prefix2SETvalue = {
         '': function(e, name, val) { jQuery.attr  (e, name,       val); },
         ':': function(e, name, val) { jQuery.data (e, name,       val); },
-        '~': function(e, name, val) { jQuery.css  (e, name,       val); },
+        '~': function(e, name, val) { jQuery.style(e, name,       val); },
         '&': function(e, name, val) { jQuery.data (e, 'events',   val); },
         '::': function(e, name, val) { jQuery.data(e, 'metadata', val); }
     }
@@ -161,7 +161,7 @@ load :=  {
     var prefix2GETvalue = {
         '': function(e, val) { return { 'val': e[val] || jQuery.attr(e, val), 'unit': NS }; },
         ':': function(e, val) { return { 'val': jQuery.data(e, val), 'unit': NS }; },
-        '~': function(e, val) { return css2vu(jQuery.css(e, name, val)); },
+        '~': function(e, val) { return css2vu(jQuery.css(e, val)); },
         '&': function(e, val) { var d = jQuery.data(e, 'events'); return { 'val': d && d[val], 'unit': NS }; },
         '::': function(e, val) { var d = jQuery.data(e, 'metadata'); return { 'val': d && d[val], 'unit': NS }; }
     }
