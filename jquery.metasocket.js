@@ -149,10 +149,10 @@ load :=  {
     //       without such a plugin we can parse only attributes ...
     //
     var prefix2SETvalue = {
-        '': function(e, name, val) { jQuery.attr(e, name, val); },
-        ':': function(e, name, val) { jQuery.data(eval, name, val); },
-        '~': function(e, name, val) { jQuery.attr(e.style, name, val); },
-        '&': function(e, name, val) { jQuery.data(e, 'events', val); },
+        '': function(e, name, val) { jQuery.attr  (e, name,       val); },
+        ':': function(e, name, val) { jQuery.data (e, name,       val); },
+        '~': function(e, name, val) { jQuery.css  (e, name,       val); },
+        '&': function(e, name, val) { jQuery.data (e, 'events',   val); },
         '::': function(e, name, val) { jQuery.data(e, 'metadata', val); }
     }
     // always return {'val' : value, 'unit' : unit }
@@ -161,7 +161,7 @@ load :=  {
     var prefix2GETvalue = {
         '': function(e, val) { return { 'val': e[val] || jQuery.attr(e, val), 'unit': NS }; },
         ':': function(e, val) { return { 'val': jQuery.data(e, val), 'unit': NS }; },
-        '~': function(e, val) { return css2vu(jQuery.curCSS(e, val)); },
+        '~': function(e, val) { return css2vu(jQuery.css(e, name, val)); },
         '&': function(e, val) { var d = jQuery.data(e, 'events'); return { 'val': d && d[val], 'unit': NS }; },
         '::': function(e, val) { var d = jQuery.data(e, 'metadata'); return { 'val': d && d[val], 'unit': NS }; }
     }
@@ -174,7 +174,7 @@ load :=  {
     function parse_name_value_object(last_match) {
         var match = EX.exec(last_match), nme = match[1], pfx = nme.match(/(^\W+)(.*)/);
         var name = nme.match(/\w+/)[0],
-                prefix = (pfx ? pfx[1] : ""),
+                prefix = (pfx ? pfx[1].trim() : ""), /* 2013 MAR 04 DBJ added trim() */
                 operator = match[2],
                 operand = match[4];
 

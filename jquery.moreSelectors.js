@@ -13,9 +13,17 @@
 
     var Expr = Sizzle.selectors;
 
-    Expr.attrPrefix = {};
+    /* 2012 MAR 03 DBJ moved here */
+    Expr.attrPrefix = {
+        ':': function (e, val) { return $(e).data(val); },
+        '~': function (e, val) { return $.css(e, val); }, /* Mar-2013 DBJ replaced curCSS() with css() */
+        '&': function (e, val) { var d = $.data(e, 'events'); return d && d[val]; },
+        '::': function (e, val) { var d = $.data(e, 'metadata'); return d && d[val]; }
+    };
 
-    /* 2013 MAR 03 this has to stay even for jQ 1.9.1 */
+    /* 2013 MAR 03 this has to stay even for jQ 1.9.1 
+       otherwise attr prefixes above will not be recognized
+    */
     Expr.match.ATTR = /\[\s*(\W*(?:[\w\u00c0-\uFFFF_-]|\.|\\.)+)\s*(?:(\S?[=<>])\s*(['"]*)(.*?)\3|)\s*\](?![^\[]*\])(?![^\(]*\))/;
     //inserted:              \W*                      |\.                 [ <>]                         lookahead appended later
 
@@ -23,26 +31,28 @@
     if (! Expr.leftMatch) Expr.leftMatch = {} ;
 
         /* 2010-04-21 Balazs fix for jQuery (Sizzle) 1.4.2 */
-        Expr.leftMatch.ATTR = new RegExp(/(^(?:.|\r|\n)*?)/.source +
-        Expr.match.ATTR.source.replace(/\\(\d+)/g, function (all, num) { return "\\" + (num - 0 + 1); }));
+       // Expr.leftMatch.ATTR = new RegExp(/(^(?:.|\r|\n)*?)/.source +
+       // Expr.match.ATTR.source.replace(/\\(\d+)/g, function (all, num) { return "\\" + (num - 0 + 1); }));
         
     /* 
     2012 MAR 04: DBJ
     This was the BE version that worketh with jq 1.4.x
+    this was the footprint: var BE_ATTR = function(elem, match) {
+
     this version uses Sizzle.selectors.attrPrefix 
     */
-    var BE_ATTR = function(elem, match) {
+    var BE_ATTR = function(elem, name_, operator_, check_ ) {
 
-        var name = match[1],
+        var name = name_,
 		result,
 		value,
-		type = match[2],
-		check = match[4],
+		type = operator_ ,
+		check = check_ ,
 		prefix = name.match(/(^\W+)(.*)/);
 
         if (prefix !== null) {
             for (var i in Expr.attrPrefix)
-                if (i === prefix[1]) {
+                if (i === prefix[1].trim()) {
                 result = Expr.attrPrefix[i](elem, prefix[2]);
                 break;
             }
@@ -88,11 +98,13 @@
 		type === "<=" ? value <= check :
 		type === ">=" ? value >= check :
 		false;
-    } /* eof ATTR */
+    } /* eof BE_ATTR */
 
     /* 2013 MAR 04 DBJ: this is the latest ATTR() taken from Sizzle */
     Expr.filter.ATTR = function (name, operator, check) {
-        return function( elem ) {
+        return function (elem) {
+               return BE_ATTR(elem, name, operator, check);
+            /*
             var result = Sizzle.attr( elem, name );
             if ( result == null ) {
                 return operator === "!=";
@@ -109,16 +121,9 @@
                 operator === "~=" ? ( " " + result + " " ).indexOf( check ) > -1 :
                 operator === "|=" ? result === check || result.slice( 0, check.length + 1 ) === check + "-" :
                 false;
+        */
         };
     }
-
-    /* 2012 MAR 03 DBJ moved here */
-    $.extend($.expr.attrPrefix, {
-        ':': function (e, val) { return $(e).data(val); },
-        '~': function (e, val) { return $.css(e, val); }, /* Mar-2013 DBJ replaced curCSS() with css() */
-        '&': function (e, val) { var d = $.data(e, 'events'); return d && d[val]; },
-        '::': function (e, val) { var d = $.data(e, 'metadata'); return d && d[val]; }
-    })
 
 })((jQuery && jQuery.find) || Sizzle);
 
