@@ -27,7 +27,7 @@
 .toolbar button { margin:2px 5px 2px 2px; width:128px; height:32px; 
                   font-size:16px; overflow:hidden; text-align:left; padding:1px 1px 1px 5px; }
 _display { width:100%; height:99%; margin:1px; padding:1px; overflow:auto; 
-           /*font: small/1.1 verdana, arial, tahoma ;*/
+           font: small/1.1 "courier new",verdana, arial, tahoma ;
          }
 /*         */
 #specimen { position:absolute; right:10px; bottom:10px; width:150px; height:30px; border:2px solid; z-index:99;
@@ -46,15 +46,41 @@ textarea { overflow:auto; white-space:pre; word-spacing:normal; }
 <button id="highlight">Highlight</button><button id="eval">Eval</button>
 </div>
 <div class="dbjPanel" style="float:left;">
-<textarea id="display" rows="80" cols="160" style="width:99%;height:99%" class="editableText" >
-/* this trivial example plug changes the elements matched */
-var selector = "#specimen[~right]";
-$(selector).css("right",10);
-$(selector).S( function (P) {
-     show_ =  "#" + this.id + ", right:" + P.let("right",  400) ; 
-     return true; // signal that values in P are to be 'mapped back' to 'this' element 
-});
-show_;
+<textarea id="display" rows="80" cols="160" style="width:99%;height:99%" >
+    /* Object to store things collected from dom elements */
+    var result = {};
+    /* Function called on each element in jQuery stack, to collect attributes or style properties */
+    function collector() {
+        var names = arguments,
+            id_ = function (el) {
+                return el.tagName + (el.id ? "#" + el.id : "");
+            },
+            set_ = function (obj) {
+                return obj || {};
+            },
+for_each_name = function (callback) {
+     for (var j = 0, l = names.length; j < l; j++) callback(names[j], j);
+            };
+        /* the "plug" */
+        return function (P) {
+            var id = id_(this);
+            for_each_name(function (name, idx) {
+                if (undefined === P.nvo[name]) {
+                result[id][name] = "undefined";
+                } else {
+                result[id] = set_(result[id]);
+                result[id][name] = P.nvo[name].value;
+                }
+            });
+            return false; 
+        }
+    };
+    $("[id][~ bottom]")
+    .S(collector('bottom'));
+
+    var show_ = JSON.stringify(result);
+    show_.split("{").join("{\n").split("}").join("}\n");
+
 </textarea>
 </div>
 <div class="dbjPanel" style="float:right;">
@@ -137,7 +163,7 @@ show_;
                 rezult = handler(x);
             }
             if (rezult) {
-                $rezult.val($rezult.val() + NL + NL + rezult);
+                $rezult.val(rezult);
             }
         })
 
