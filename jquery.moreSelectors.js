@@ -1,7 +1,8 @@
 ﻿/*!
 * Enhanced attribute selectors for Sizzle/jQuery
 * Version: 1.0.1
-* Copyright (c) 2009 Balazs Endresz (balazs.endresz@gmail.com)
+* Copyright (c) 2009 Balazs Endresz (BE) (balazs.endresz@gmail.com)
+* 
 * Released under the MIT, BSD, and GPL Licenses.
 
  2010-04-21 Balazs fix for jQuery (Sizzle) 1.4.2
@@ -25,8 +26,12 @@
         Expr.leftMatch.ATTR = new RegExp(/(^(?:.|\r|\n)*?)/.source +
         Expr.match.ATTR.source.replace(/\\(\d+)/g, function (all, num) { return "\\" + (num - 0 + 1); }));
         
-    /* this version uses Sizzle.selectors.attrPrefix */
-    Expr.filter.ATTR = function(elem, match) {
+    /* 
+    2012 MAR 04: DBJ
+    This was the BE version that worketh with jq 1.4.x
+    this version uses Sizzle.selectors.attrPrefix 
+    */
+    var BE_ATTR = function(elem, match) {
 
         var name = match[1],
 		result,
@@ -85,6 +90,27 @@
 		false;
     } /* eof ATTR */
 
+    /* 2013 MAR 04 DBJ: this is the latest ATTR() taken from Sizzle */
+    Expr.filter.ATTR = function (name, operator, check) {
+        return function( elem ) {
+            var result = Sizzle.attr( elem, name );
+            if ( result == null ) {
+                return operator === "!=";
+            }
+            if ( !operator ) {
+                return true;
+            }
+            result += "";
+            return operator === "=" ? result === check :
+                operator === "!=" ? result !== check :
+                operator === "^=" ? check && result.indexOf( check ) === 0 :
+                operator === "*=" ? check && result.indexOf( check ) > -1 :
+                operator === "$=" ? check && result.slice( -check.length ) === check :
+                operator === "~=" ? ( " " + result + " " ).indexOf( check ) > -1 :
+                operator === "|=" ? result === check || result.slice( 0, check.length + 1 ) === check + "-" :
+                false;
+        };
+    }
 
     /* 2012 MAR 03 DBJ moved here */
     $.extend($.expr.attrPrefix, {
