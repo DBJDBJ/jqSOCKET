@@ -6,6 +6,10 @@
 DBJ String additions
 no dependancies
 
+CURRENTLY NOT USED
+
+key helper available from here is "string {} rules".format("format")
+
  */
 
 (function (global, undefined) {
