@@ -4,6 +4,9 @@ With jQuery 1.4.1  this works as before, after moving to jQ 1.9.1 moreSelectors.
 1.
 "[~right]" has to be changed to "[~ right]" to work
 2.
+another problem is that now we have much more elements selected than we should.
+"#specimen" {~ right]" gives 13 elements. see here : http://jsfiddle.net/dbjdbj/XCvs9/81/
+3.
 All the other attr prefixes are not tested
 jqunit testebed has to be done
 
