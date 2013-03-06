@@ -100,12 +100,15 @@
 		false;
     } /* eof BE_ATTR */
 
-    /* 2013 MAR 04 DBJ: this is the latest ATTR() taken from Sizzle */
     Expr.filter.ATTR = function (name, operator, check) {
         return function (elem) {
-               return BE_ATTR(elem, name, operator, check);
-            /*
-            var result = Sizzle.attr( elem, name );
+            /* 2013 MAR 06 DBJ: if there is a BE prefix use BE ATTR() */
+            var pfx = name.trim().match(/\S+/);
+            if (pfx in Expr.attrPrefix) {
+                return BE_ATTR(elem, name, operator, check);
+            }
+ /* 2013 MAR 04 DBJ: this is the latest ATTR() taken from Sizzle */
+          var result = Sizzle.attr(elem, name);
             if ( result == null ) {
                 return operator === "!=";
             }
@@ -121,7 +124,6 @@
                 operator === "~=" ? ( " " + result + " " ).indexOf( check ) > -1 :
                 operator === "|=" ? result === check || result.slice( 0, check.length + 1 ) === check + "-" :
                 false;
-        */
         };
     }
 
