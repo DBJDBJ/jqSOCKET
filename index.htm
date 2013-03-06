@@ -1,4 +1,4 @@
-<!DOCTYPE html > 
+﻿<!DOCTYPE html > 
 <html>
 <!--
 //                                                                  
@@ -17,7 +17,7 @@
 <!--##########################################################################################################-->
 <!--		  Set document compatibility mode to IE8Mode                                                      -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta http-equiv="content-type" content="application/xhtml+xml; charset=iso-8859-1" />
+<!-- meta http-equiv="content-type" content="application/xhtml+xml; charset=iso-8859-1" /-->
 <!--##########################################################################################################-->
 <title>DBJ*MetaSocket&trade; $Revision: 26 $ &copy;2009-2010 by DBJ.ORG</title>
 <link href="http://dbj.org/4/blueprint/screen.css" rel="stylesheet" type="text/css" media="all" />
@@ -95,51 +95,37 @@ for_each_name = function (callback) {
 <script src="jquery.moreSelectors.js" type="text/javascript" ></script>
 <script src="jquery.metasocket.js" type="text/javascript" ></script>
 <!-- DBJ -->
-<script type="text/javascript" >
+<script type="text/javascript" id="_dbj_util_" >
     var M$FT = /*@cc_on!@*/false, NL = M$FT ? "\r\n" : "\n";
-    var handler = (function() {
-    function who_called(F, x) {
-            try {
-                var who = F.caller.toString().match(/\w+/g);
-                return who[0] + " " + who[1];
-            } catch (x) {
-                return " GLOBAL namespace ";
-            }
-        }
+    var handler = (function () {
+        "use strict"
         function errshow(errobj) {
             return NL + "EXCEPTION: " + errobj.name + " " + ", number : " + (errobj.number & 0xFFFF) +
-               ", description : " + errobj.description + (errobj.stack ? NL + errobj.stack : NL)
-                + ", from: " + who_called(handler);
+               ", description : " + errobj.description + (errobj.stack ? NL + errobj.stack : NL);
         }
 
-        return function(x, error) {
+        var just_return = function (x) { return x; },
+            use_and_return = (function (callback) {
+                return function (x) { callback(x); return x; };
+                }) ,
+            show = {
+                err: use_and_return(  window.console ?  window.console.error.bind(window.console) : just_return),
+                inf: use_and_return(window.console ? window.console.info.bind(window.console) : just_return),
+                wrn: use_and_return(window.console ? window.console.warn.bind(window.console) : just_return)
+        } ;
+
+        return function (x) {
+            var error = false;
             if ("boolean" === typeof x && x === false) {
-                error = x = "Assertion Failed!";
+                x = show.err( errshow(new Error("Assertion Failed!")));
             }
-            if (Object.prototype.toString.call(x) === "[object Error]") {
-                error = x = errshow(x);
-            }
-            if (window.console) {
-                if (error)
-                    window.console.error(x);
-                else
-                    window.console.info(x);
-            }
+            else if (Object.prototype.toString.call(x) === "[object Error]") {
+                x = show.err(errshow(x));
+            } else
+                x = show.inf(""+x);
             return x ;
         }
     } ());
-</script>
-<script type="text/javascript" >
-    /* 
-    apply every value in argument object to the 
-    css of this jQuery instance 
-    */
-    jQuery.fn.cssApply = function(propobj) {
-        for (var prop in propobj) {
-            this.css(prop, propobj[prop]);
-        }
-        return this;
-    };
 </script>
 <script type="text/javascript" >
     jQuery(function(undefined) {
