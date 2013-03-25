@@ -1,4 +1,3 @@
-
 With jQuery 1.4.1  this works as before, after moving to jQ 1.9.1 moreSelectors.js has issues:
 
 1.
@@ -16,4 +15,6 @@ listable: http://dbj.org/6/index.php?dir=jqplug%2F
 
 Long explanation, FOR PUBLIC, will be here:
 http://dbj.org/dbj/?page_id=734
+
+PS: this is how it started: http://dbj.org/dbj/?p=85
 
