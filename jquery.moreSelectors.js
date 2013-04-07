@@ -17,13 +17,13 @@
     for css  -- "[~name  operator value]"
     for prop -- "[::name operator value]"
 
-    If extended attr syntax is used four new operators can be also used: 
+    If extended attr syntax is used four new operators can also be applied: 
     >, <, <=, >=
     in which case,before comparison, parseFloat() is applied to value obtained.
     Example:
     $("div[id][~bottom>=10]").css("bottom");
     Above will select any div element that has a 'id' attribute and css bottom property
-    bigger or equal to "10px" or "10%" or any other number/unit combination.
+    bigger or equal to "10px" or "10%" or any other number/unit combination stored in css style.
     NOTE: if value or check value can not be parsed into float (NaN situation) they will NOT 
           be compared and the result will be false. So think of that.
 
