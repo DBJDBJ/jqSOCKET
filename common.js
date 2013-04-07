@@ -73,13 +73,9 @@
 
         // Title
         $rezult.val(
-           $.S.version + NL +
-           "Enhanced Attribute Selectors Version: 1.0.2, by Balazs Endresz (balazs.endresz@gmail.com)" + NL +
-           "jQuery : " + $().jquery + NL + NL +
-           "Any valid JavaScript on the left can be evaluated and result shown here" + NL +
-           "Plugin MetaSocket(tm) called: 'S()', requires one 'plug' function as an argument" + NL +
-           "Arguments to the 'plug' are one or more names used in the 'where' part of the selector" + NL +
-           "See the trivial example on the left" + NL +
+           NL +
+           "DVJ Enhanced Attribute Selectors Version: 2.0.0" + NL +
+           "jQuery : " + $().jquery + NL +
            "-----------------------------------" + NL
         );
 
