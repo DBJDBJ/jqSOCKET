@@ -22,18 +22,52 @@
 <link href="http://dbj.org/4/blueprint/ie.css" rel="stylesheet" type="text/css" media="all" />
     <style type="text/css">
         body {
-            height:100%; overflow:hidden; 
+            height:600px; overflow:hidden; padding:2px; margin:10px;
+            border:4px dotted red;
+            background-color:lightgray;
+            font-size: 1.1em;
         }
-        #container { padding:20px; width:100%;height:100%; background-color:lightgray;
+        input { width:50%; display:block; font-size:inherit;
         }
-        iframe {
-            width: 90%; height: 400px; border:2px solid black;
-        }
+        li { list-style:none ; }
     </style>
 </head>
 <body>
 <div id="container">
-<iframe src="http://jsfiddle.net/dbjdbj/DPq5e/17/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+    <input value="input:rx(css:width = 50%)" />
+    <button style="left:5px; top:5px;">
+        Click Here to Save Everything
+    </button>
     </div>
 </body>
+<script src="../jquery-1.9.1.js"></script>
+<script src="dbjregex.js"></script>
+    <script>
+        $container = $("#container");
+        $(function () {
+
+          function T(expr) {
+                $container.append(
+                    "<li>$(" + expr + ").length = " + $(expr).length + "</li>"
+                     );
+            }
+            
+            $("input").on("keypress", function (E) {
+                if (E.ctrlKey) return;
+                if (10 !== E.charCode) return;
+                var val = $(this).val();
+                if (!!val) T(val);
+            });
+
+            $("input").on("keypress", function (E) {
+                if (!E.ctrlKey) return;
+                if (10 !== E.charCode) return;
+                var val =   $.events($(this).val());
+                if (!!val) T( console ? console.dir(val) : val );
+            });
+
+            // var event_list = $.events("input");
+
+        });
+    </script>
 </html>
