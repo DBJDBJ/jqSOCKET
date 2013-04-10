@@ -27,6 +27,7 @@
             background-color:lightgray;
             font-size: 1.1em;
         }
+        button.dbj {            left:5px; top:5px;        }
         input { width:50%; display:block; font-size:inherit;
         }
         li { list-style:none ; }
@@ -34,11 +35,11 @@
 </head>
 <body>
 <div id="container">
-    <input value="input:rx(css:width = 50%)" />
-    <button style="left:5px; top:5px;">
+    <button class="dbj" >
         Click Here to Save Everything
     </button>
-    </div>
+    <input value="input:rx(css:width = 50%)" />
+</div>
 </body>
 <script src="../jquery-1.9.1.js"></script>
 <script src="dbjregex.js"></script>
@@ -54,7 +55,7 @@
             
             $("input").on("keypress", function (E) {
                 if (E.ctrlKey) return;
-                if (10 !== E.charCode) return;
+                if (13 !== E.charCode) return;
                 var val = $(this).val();
                 if (!!val) T(val);
             });
@@ -65,8 +66,6 @@
                 var val =   $.events($(this).val());
                 if (!!val) T( console ? console.dir(val) : val );
             });
-
-            // var event_list = $.events("input");
 
         });
     </script>
