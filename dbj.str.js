@@ -8,7 +8,7 @@ no dependancies
 
 CURRENTLY NOT USED
 
-key helper available from here is "string {} rules".format("format")
+key uility available from here is "string {0} rules".format("format")
 
  */
 
@@ -41,26 +41,28 @@ key helper available from here is "string {} rules".format("format")
 
     function pad(str, opt) {
 
+        if (!opt) return str;
+
         var len = opt.len || 0, pad = opt.pad || ' ', dir = opt.dir || STR_PAD_RIGHT;
 
         if (len < str.length) return str;
 
-        return dbj.cond(dir,
-                STR_PAD_LEFT,
-                function() {
+        switch (dir) {
+            case STR_PAD_LEFT:
+                {
                     return Array(len + 1 - str.length).join(pad) + str;
-                },
-                STR_PAD_BOTH,
-                function() {
-                    var right = Math.ceil((padlen = len - str.length) / 2);
-                    var left = padlen - right;
+                }
+            case STR_PAD_BOTH:
+                {
+                    var right = Math.ceil((padlen = len - str.length) / 2),
+                        left = padlen - right;
                     return Array(left + 1).join(pad) + str + Array(right + 1).join(pad);
-                },
-        /* default is STR_PAD_RIGHT */
-                function() {
+                }
+            default: /* STR_PAD_RIGHT */
+                {
                     return str + Array(len + 1 - str.length).join(pad);
                 }
-         )();
+        }
     }
 
 
